@@ -163,7 +163,7 @@ let setRouter = (app) =>{
     */
 
 
-    app.post(`${baseURl}/add/frndRequest`,userController.addFrndReq);
+    app.post(`${baseURl}/add/frndRequest`,authMiddleware.isAuthorized,userController.addFrndReq);
     /**
      * @apiGroup users
      * @apiVersion  1.0.0
@@ -221,7 +221,7 @@ let setRouter = (app) =>{
     */
 
 
-    app.post(`${baseURl}/move`,userController.moveUser);
+    app.post(`${baseURl}/move`,authMiddleware.isAuthorized,userController.moveUser);
 
     /**
      * @apiGroup users
