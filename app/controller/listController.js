@@ -28,11 +28,12 @@ let createList = (req,res) =>{
 
     newList.save((err,result)=>{
         if(err){
-
+            logger.error(err.message, 'list controller',10)
             let apiResponse =  response.generate(true,'error in saving',400,null);
             res.send(apiResponse)
 
         }else{
+            logger.info('list created','list controller',5)
             let apiResponse = response.generate(false,'new list createed successfully',200,result);
             res.send(apiResponse);
         }
@@ -47,9 +48,11 @@ let getAllListOfUser = (req,res) =>{
     listModel.find({userId:req.body.userId})
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'list controller',10)
             let apiResponse = response.generate(true,'unable to find details',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('list details found','list controller',5)
             let apiResponse = response.generate(false,'all lists found',200,result);
             res.send(apiResponse)
         }
@@ -62,9 +65,11 @@ let deleteList = (req,res) =>{
     listModel.deleteOne({listId:req.body.listId})
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'list controller',10)
             let apiResponse = response.generate(true,'unable to delete',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('list deleted','list controller',5)
             let apiResponse = response.generate(false,'delete successfull',200,result);
             res.send(apiResponse)
         }
@@ -76,10 +81,11 @@ let updateListUsingListId = (req,res) =>{
     listModel.update({listId:req.body.listId},options)
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'list controller',10)
             let apiResponse = response.generate(true,'unable to update details',400,null);
             res.send(apiResponse)
         }else{
-
+            logger.info('list updated','list controller',5)
             let apiResponse = response.generate(false,'details updated',200,result);
             res.send(apiResponse)
 
@@ -95,10 +101,11 @@ listModel.update({userId:req.body.userId},options , {multi:true} )
 
 .exec((err,result)=>{
     if(err){
+        logger.error(err.message, 'list controller',10)
         let apiResponse = response.generate(true,'unable to update details',400,null);
         res.send(apiResponse)
     }else{
-
+        logger.info('list updated','list controller',5)
         let apiResponse = response.generate(false,'details updated',200,result);
         res.send(apiResponse)
 
@@ -114,9 +121,11 @@ let deleteAllListsOfUser = (req,res) =>{
     .exec((err,result)=>{
 
         if(err){
+            logger.error(err.message, 'list controller',10)
             let apiResponse = response.generate(true,'unable to delete details',400,null);
         res.send(apiResponse)
         }else{
+            logger.info('list deleted','user controller',5)
         let apiResponse = response.generate(false,'all lists deleted',200,result);
         res.send(apiResponse)
         }

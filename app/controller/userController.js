@@ -280,15 +280,19 @@ let loginFunction = (req,res) =>{
 let getUserDetails = (req,res) =>{
 
     userModel.find({userId:req.body.userId})
+    .select('-_id -__v,-password')
     .exec((err,result)=>{
 
         if(err){
+            logger.error(err.message, 'getUserDetails',10)
             let apiResponse = response.generate(true,'error in searching for user',400,null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'getUserDetails',10)
             let apiResponse = response.generate(true,'no such users exists',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,'user details found',200,result);
             res.send(apiResponse);
         }
@@ -301,9 +305,11 @@ let updateUser  = (req,res) =>{
     userModel.update({userId:req.body.userId},options)
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'error in searching for user',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,'user details updated',200,result);
             res.send(apiResponse);
         }
@@ -315,13 +321,16 @@ let updateUserusingEmail = (req,res) =>{
     userModel.update({email:req.body.email},options)
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'error in searching for user',400,null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'no account found with email',400,null);
             res.send(apiResponse)
         }
         else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,'user details updated',200,result);
             res.send(apiResponse);
         }
@@ -332,12 +341,15 @@ let updateUserusingEmail = (req,res) =>{
 let updateListArr = (req,res) =>{
 
     userModel.findOne({userId:req.body.userId})
+    .select('-_id -__v,-password')
     .exec((err,result)=>{
         
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'error in searching for user',400,null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'no such users exists',400,null);
             res.send(apiResponse)
         }else{
@@ -350,11 +362,13 @@ let updateListArr = (req,res) =>{
             result.listArr.push(req.body.list);
 
             result.save((error,result)=>{
-
+                
                 if(error){
+                    logger.error(err.message, 'user controller',10)
                     let apiResponse = response.generate(true,'error in saving in the array',400,null)
                     res.send(apiResponse)
                 }else{
+                    logger.info('user details found','user controller',5)
                     let apiResponse = response.generate(false,'update successfull',200,result);
                     res.send(apiResponse);
                 }
@@ -370,13 +384,15 @@ let updateListArr = (req,res) =>{
 let updateIndex = (req,res)=>{
 
     userModel.findOneAndUpdate({userId:req.body.userId},{currentIndex:req.body.currentIndex})
+    .select('-_id -__v,-password')
     .exec((err,result)=>{
         if(err){
-
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'unable ,400,nullto update',400,null);
             res.send(apiResponse);
 
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,'update successfull',200,result);
             res.send(apiResponse);
         }
@@ -391,12 +407,15 @@ let getUserUsingEmail = (req,res) =>{
     .select('-_id -__v -password -listArr')
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'unable to search',400,null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'empty result returned',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,'user found',200,result);
             res.send(apiResponse);
         }
@@ -407,11 +426,14 @@ let getUserUsingEmail = (req,res) =>{
 let addFrndReq = (req,res) =>{
 
 userModel.findOne({userId:req.body.userId})
+.select('-_id -__v,-password')
 .exec((err,result)=>{
     if(err){
+        logger.error(err.message, 'user controller',10)
         let apiResponse = response.generate(true,'db error occured',400,null);
         res.send(apiResponse);
     }else if(check.isEmpty(result)){
+        logger.info('user details found','user controller',5)
         let apiResponse = response.generate(true,'no such user found',400,null);
         res.send(apiResponse)
     }else{
@@ -438,11 +460,14 @@ userModel.findOne({userId:req.body.userId})
 let moveUser = (req,res) =>{
 
     userModel.findOne({userId:req.body.userId})
+    .select('-_id -__v,-password')
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'unable to search', 400, null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'no such user exisits',400, null);
             res.send(apiResponse)
         }else{
@@ -466,9 +491,11 @@ let moveUser = (req,res) =>{
                     })
 
                     userModel.findOne({userId:req.body.fromUserId})
+                    .select('-_id -__v,-password')
                     .exec((e,r)=>{
 
                         if(e){
+                            logger.error(err.message, 'user controller',10)
                             let apiResponse = response.generate(true,'unable to save',400,null);
                             res.send(apiResponse)
                         }else{
@@ -483,9 +510,11 @@ let moveUser = (req,res) =>{
                             r.friendList.push(xyz);
                             r.save((er,re)=>{
                                 if(er){
+                                    logger.error(err.message, 'user controller',10)
                                     let apiResponse = response.generate(true,'unable to save',400,null);
                                     res.send(apiResponse)
                                 }else{
+                                    logger.info('user details found','user controller',5)
                                     let apiResponse = response.generate(false,'details moved successfully',200,re)
                                     res.send(apiResponse);
                                 }
@@ -509,12 +538,15 @@ userModel.find()
 .select('-_id')
 .exec((err,result)=>{
     if(err){
+        logger.error(err.message, 'user controller',10)
         let apiResponse = response.generate(true,'error occured while searching',400,null);
         res.send(apiResponse)
     }else if(check.isEmpty(result)){
+        logger.error(err.message, 'user controller',10)
         let apiResponse = response.generate(true,'empty result returned',400,null);
         res.send(apiResponse)
     }else{
+        logger.info('user details found','user controller',5)
         let apiResponse = response.generate(false,'all user details found',200,result)
         res.send(apiResponse)
     }
@@ -525,14 +557,18 @@ userModel.find()
 
 let getUserInfousingResetToken = (req,res) =>{
     userModel.findOne({PasswordResetToken:req.params.token})
+    .select('-_id -__v -password')
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'error occured while searching',400,null);
             res.send(apiResponse)
         }else if(check.isEmpty(result)){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'empty result returned',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,' user details found',200,result)
             res.send(apiResponse)
         }
@@ -544,9 +580,11 @@ let updateUserPassword = (req,res) =>{
     userModel.update({email:req.body.email},{password:passwordLib.hashpassword(req.body.password)})
     .exec((err,result)=>{
         if(err){
+            logger.error(err.message, 'user controller',10)
             let apiResponse = response.generate(true,'error occured while searching',400,null);
             res.send(apiResponse)
         }else{
+            logger.info('user details found','user controller',5)
             let apiResponse = response.generate(false,' user details updated',200,result)
             res.send(apiResponse)
         }
